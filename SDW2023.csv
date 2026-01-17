@@ -1,0 +1,6 @@
+UserID,Name,AccountNumber,Agency,AccountBalance,AccountLimit,CardNumber,CardLimit
+1,Naruto Uzumaki,10001-1,0001,500.00,1000.00,**** **** **** 1111,2000.00
+2,Hinata Hyuuga,10002-2,0001,1500.50,5000.00,**** **** **** 2222,8000.00
+3,Sasuke Uchiha,10003-3,0001,0.00,200.00,**** **** **** 3333,500.00
+4,Sakura Haruno,10004-4,0001,3200.00,1500.00,**** **** **** 4444,3000.00
+5,Kakashi Hatake,10005-5,0001,10000.00,10000.00,**** **** **** 5555,15000.00
