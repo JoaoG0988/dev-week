@@ -1,62 +1,61 @@
-# Santander Dev Week 2023
+# Santander Dev Week 2023 - Projeto de ETL Bancário
 
-Java RESTful API criada para a Santander Dev Week.
+Este projeto foi desenvolvido como parte de um desafio prático para consolidar conhecimentos em **Engenharia de Dados (ETL)**, **IA Generativa** e **Desenvolvimento Backend com Java**. O objetivo é processar dados de clientes e criar mensagens de marketing personalizadas focadas em investimentos.
 
-## Principais Tecnologias
- - **Java 17**: Utilizaremos a versão LTS mais recente do Java para tirar vantagem das últimas inovações que essa linguagem robusta e amplamente utilizada oferece;
- - **Spring Boot 3**: Trabalharemos com a mais nova versão do Spring Boot, que maximiza a produtividade do desenvolvedor por meio de sua poderosa premissa de autoconfiguração;
- - **Spring Data JPA**: Exploraremos como essa ferramenta pode simplificar nossa camada de acesso aos dados, facilitando a integração com bancos de dados SQL;
- - **OpenAPI (Swagger)**: Vamos criar uma documentação de API eficaz e fácil de entender usando a OpenAPI (Swagger), perfeitamente alinhada com a alta produtividade que o Spring Boot oferece;
- - **Railway**: facilita o deploy e monitoramento de nossas soluções na nuvem, além de oferecer diversos bancos de dados como serviço e pipelines de CI/CD.
+## 🚨 Solução Resiliente (API Offline)
 
-## [Link do Figma](https://www.figma.com/file/0ZsjwjsYlYd3timxqMWlbj/SANTANDER---Projeto-Web%2FMobile?type=design&node-id=1421%3A432&mode=design&t=6dPQuerScEQH0zAn-1)
+Como a API original de demonstração (`sdw-2023-prd.up.railway.app`) foi descontinuada, este repositório implementa um fluxo de **ETL alternativo** que garante o funcionamento do projeto de forma totalmente independente e local:
 
-O Figma foi utilizado para a abstração do domínio desta API, sendo útil na análise e projeto da solução.
+* **Extração (Extract)**: Realizada a partir do ficheiro `SDW2023.csv` na raiz do projeto, contendo dados simulados de clientes como Nome, Conta e Limites.
+* **Transformação (Transform)**: O script Python processa estes dados e gera mensagens personalizadas, simulando o comportamento de um especialista em marketing bancário via IA.
+* **Carregamento (Load)**: Os dados enriquecidos são persistidos num ficheiro `transformed_users.json`, permitindo a visualização dos resultados finais sem dependência de serviços externos.
 
-## Diagrama de Classes (Domínio da API)
+## 🏗️ Arquitetura do Sistema
 
-```mermaid
-classDiagram
-  class User {
-    -String name
-    -Account account
-    -Feature[] features
-    -Card card
-    -News[] news
-  }
+A solução integra duas frentes principais:
 
-  class Account {
-    -String number
-    -String agency
-    -Number balance
-    -Number limit
-  }
+### 1. Backend (Java/Spring Boot)
+Uma API RESTful que define o domínio bancário robusto:
+* **Modelo de Dados**: Entidades como `User`, `Account`, `Card` e `News` mapeadas com JPA.
+* **Serviços**: Lógica de negócio para criação e consulta de utilizadores com validações de integridade.
+* **Documentação**: API documentada com Swagger/OpenAPI para facilitar a integração.
 
-  class Feature {
-    -String icon
-    -String description
-  }
+### 2. Pipeline de Dados (Python)
+Script responsável pelo processamento de dados em lote:
+* **Manipulação**: Uso da biblioteca Pandas para leitura e estruturação dos dados.
+* **Personalização**: Geração de mensagens dinâmicas baseadas no perfil financeiro extraído do CSV.
 
-  class Card {
-    -String number
-    -Number limit
-  }
+## 🛠️ Tecnologias Utilizadas
 
-  class News {
-    -String icon
-    -String description
-  }
+* **Java 17 & Spring Boot 3**
+* **Spring Data JPA** para persistência de dados
+* **H2 Database** (Ambiente de Desenvolvimento)
+* **PostgreSQL** (Ambiente de Produção)
+* **Python 3.x** com Pandas
+* **OpenAPI (Swagger)** para documentação
 
-  User "1" *-- "1" Account
-  User "1" *-- "N" Feature
-  User "1" *-- "1" Card
-  User "1" *-- "N" News
+## 🚀 Como Executar
+
+### Pré-requisitos
+* Java 17 ou superior.
+* Python 3.x e gestor de pacotes `pip`.
+
+### Passo 1: Executar o Backend (Opcional)
+Para rodar a API Java localmente:
+```bash
+./gradlew bootRun
 ```
 
-## IMPORTANTE
+### Passo 2: Executar o ETL (Python)
 
-Este projeto foi construído com um viés totalmente educacional para a DIO. Por isso, disponibilizamos uma versão mais robusta dele no repositório oficial da DIO:
+#### Recomendado: criar e ativar ambiente virtual
+```bash
+python -m venv venv
+source venv/bin/activate  # Windows: .\venv\Scripts\Activate.ps1
+```
 
-### [digitalinnovationone/santander-dev-week-2023-api](https://github.com/digitalinnovationone/santander-dev-week-2023-api)
-
-Lá incluímos todas os endpoints de CRUD, além de aplicar boas práticas (uso de DTOs e refinamento na documentação da OpenAPI). Sendo assim, caso queira um desafio/referência mais completa é só acessar 👊🤩
+#### Instalar dependências e rodar
+```bash
+pip install pandas
+python etl_pipeline.py
+```
